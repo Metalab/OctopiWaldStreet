@@ -6,7 +6,7 @@ Image {
     property string color: 'blue'
     property real xSpeed: 0
     property real ySpeed: 0
-    property real particlestrength: 0.9
+    property real particlestrength: 0.99
 
     scale: .5
     smooth: true
@@ -23,18 +23,12 @@ Image {
              width: 10
              height: 10
              source: 'img/sprayparticle.png'
-             lifeSpan: 3000
-             count: 400 * particlestrength + 150
+             lifeSpan: 400
+             count: 400 * particlestrength
              angle: 90
-             angleDeviation: 35
-             velocity: 80
-             velocityDeviation: 35 * particlestrength + 10
-
-             ParticleMotionGravity {
-                 yattractor: 0
-                 xattractor: 0
-                 acceleration: 30
-             }
+             angleDeviation: 40
+             velocity: 100
+             velocityDeviation: 45 * particlestrength
          }
 }
 
