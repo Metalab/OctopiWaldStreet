@@ -22,3 +22,34 @@
 
                           http://thp.io/2011/octopi/
 
+
+ Usage:
+
+  1. You need a recent version of PS Move API:
+     http://hithub.com/thp/psmoveapi
+
+  2. You need your controllers paired with your PC:
+     Use "psmovepair" from PS Move API for this (compile with hidapi support)
+
+  3. You need the Move Daemon on your PC:
+     Use "moved" from PS Move API for this (compile with moved support)
+
+  4. Disable hid in bluetoothd by editing /etc/bluetooth/main.conf:
+     Add "input" to the DisablePlugins list, e.g. DisablePlugins = input
+
+  5. Restart Bluetoothd
+
+  6. Start moved as root user or with the right permissions:
+     sudo ./moved
+
+  7. Press the PS button on each Move controller you want to use
+
+  8. The output of moved should show the controllers as they connect
+
+  9. Copy _psmove.so and psmove.py from the PS Move API build folder
+
+ 10. Start the game:
+
+     python motion.py              # This runs the game in windowed mode
+     python motion.py fullscreen   # This runs the game in fullscreen mode
+

@@ -1,21 +1,11 @@
+
 import QtQuick 1.0
 
-Item {
-    property alias color: rect.color
-    property alias rotation: rect.rotation
+Image {
+    property string color
+    scale: .5
+    smooth: true
 
-    Rectangle {
-        id: rect
-        width: 15
-        height: 35
-        color: 'blue'
-        rotation: 15
-        smooth: true
-        radius: 5
-
-        border {
-            color: 'black'
-            width: 2
-        }
-    }
+    source: 'img/' + color + '-team.png'
 }
+

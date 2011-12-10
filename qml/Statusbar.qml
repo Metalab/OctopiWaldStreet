@@ -1,6 +1,11 @@
 import QtQuick 1.0
 
 Item {
+    id: statusBar
+
+    property real firstPumpValue: .7
+    property real secondPumpValue: .2
+
     width: 600
     height: 80
 
@@ -38,6 +43,7 @@ Item {
                 anchors.left: firstPumpText.right
                 anchors.leftMargin: 5
                 width: 180
+                progress: statusBar.firstPumpValue
             }
         }
 
@@ -59,8 +65,8 @@ Item {
             anchors.margins: 8
 
             Progressbar {
-                progress: 0.8
-                scale: -1
+                progress: statusBar.secondPumpValue
+                scale: -1 // mirror it
 
                 anchors.rightMargin: 5
                 width: 180
