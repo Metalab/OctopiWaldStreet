@@ -12,6 +12,18 @@ Item {
             var corners = child.mapCornerPoints(root);
             collisions.detect(corners);
         }
+
+        // left border
+        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480]);
+
+        // right border
+        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480]);
+
+        // top border
+        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height]);
+
+        // bottom border
+        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580]);
     }
 
     Building {
