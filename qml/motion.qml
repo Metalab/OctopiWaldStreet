@@ -23,7 +23,8 @@ Rectangle {
         width: parent.width
         height: parent.height - statusBar.height
 
-        color: '#081c1f'
+        //color: '#081c1f'
+        color: '#778899'
 
         Tank {
             id: tank
@@ -46,6 +47,7 @@ Rectangle {
 
             onTriggered: {
                 // PLAYER 1
+                tank.cloudOpacity = steering1.get_trigger() / 256
                 tank.rotation += 15*steering1.get_steering()
 
                 if (pumping1.get_pumping()) {
@@ -63,6 +65,7 @@ Rectangle {
                 tank.ySpeed *= .9
 
                 // PLAYER 2
+                tank2.cloudOpacity = steering2.get_trigger() / 256
                 tank2.rotation += 15*steering2.get_steering()
 
                 if (pumping2.get_pumping()) {
