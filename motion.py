@@ -9,6 +9,7 @@ from PySide.QtDeclarative import *
 
 import sys
 import os
+import time
 
 # XXX: Should not hardcode path to the psmove module here
 sys.path.insert(0, '/home/thp/src/psmoveapi/build/')
@@ -21,6 +22,9 @@ class Controller(QObject):
     # be ignored
     CORRECT_SENSOR_POSITION_LIMITS = (0, 700, 0)
 
+    # Minimum time between two PUMP actions
+    WAIT_BETWEEN_PUMPS = .5
+
     def __init__(self, id):
         QObject.__init__(self)
         self.id = id
@@ -28,6 +32,7 @@ class Controller(QObject):
         self.sensor_values = []
         self.current_sensor_position = (0, 0, 0)
         self.last_pumping_value = 0
+        self.last_pump_action = 0
 
     @Slot(result=int)
     def get_trigger(self):
@@ -37,8 +42,11 @@ class Controller(QObject):
     @Slot(result=int)
     def get_pumping(self):
         self.move.poll()
-        if abs(self.move.gy) < 100:
-            result = 0
+        #print 'x: %6d, y: %6d, z: %6d'% (self.move.gx, self.move.gy, self.move.gz)
+        #print 'x: %6d, y: %6d, z: %6d'% (self.move.ax, self.move.ay, self.move.az)
+        #print self.move.ay
+        if abs(self.move.ay) < 20000:
+            return 0
         if self.move.gy > 0 and self.last_pumping_value < 0:
             result = 1
         elif self.move.gy < 0 and self.last_pumping_value > 0:
@@ -46,6 +54,9 @@ class Controller(QObject):
         else:
             result = 0
         self.last_pumping_value = self.move.gy
+        if result > 0 and self.last_pump_action + self.WAIT_BETWEEN_PUMPS < time.time():
+            print 'Pump', time.time()
+            self.last_pump_action = time.time()
         return result
 
     @Slot(result=int)
@@ -61,7 +72,7 @@ class Controller(QObject):
         #print current_sensor_position
         if self.position_is_correct():
             self.move.set_leds(0, 0, 0)
-            self.move.set_rumble(0)
+            #self.move.set_rumble(0)
 
             if rotation > 400:
                 #move.set_leds(0, 255, 0)
@@ -73,7 +84,7 @@ class Controller(QObject):
                 result = -1
         else:
             self.move.set_leds(255, 0, 0)
-            self.move.set_rumble(200)
+            #XXX Re-enable after debugging self.move.set_rumble(200)
 
         self.move.update_leds()
         return result

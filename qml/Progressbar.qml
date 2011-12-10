@@ -2,6 +2,8 @@ import QtQuick 1.0
 
 Item {
     property real progress: 0.4
+    property alias color: inner.color
+
     width: 150
     height: 20
     property int radius: 8
