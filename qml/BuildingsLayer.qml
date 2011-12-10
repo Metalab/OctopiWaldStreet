@@ -9,9 +9,23 @@ Item {
 
         for (i=0; i<children.length; i++) {
             var child = children[i];
-            var corners = child.mapCornerPoints(root);
-            collisions.detect(corners);
+            if (child.mapCornerPoints !== undefined) {
+                var corners = child.mapCornerPoints(root);
+                collisions.detect(corners);
+            }
         }
+
+        // left border
+        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480]);
+
+        // right border
+        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480]);
+
+        // top border
+        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height]);
+
+        // bottom border
+        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580]);
     }
 
     Building {
@@ -58,10 +72,32 @@ Item {
         rotation: -104
     }
 
+    Image {
+        id: tehCourtShadow
+        source: 'img/goal-shadow.png'
+        anchors.centerIn: tehCourt
+        scale: tehCourt.scale
+        opacity: tehCourt.altitude * .5
+        anchors.horizontalCenterOffset: 3 + tehCourt.altitude * 10
+        anchors.verticalCenterOffset: 3 + tehCourt.altitude * 10
+        rotation: tehCourt.rotation
+    }
+
     TehCourt {
+        PropertyAnimation on altitude {
+            duration: 5000
+            //loops: 100
+            from: 0
+            to: 1
+            running: false // this should be set to running once the game is
+                           // completed. then it will fly away. yo!
+        }
+        rotation: 90 * altitude
+
+        id: tehCourt
         scale: .5
-        x: parent.width/2 - width/2
-        y: parent.height - height*3/4 - 10
+        x: (1-altitude)*(parent.width/2 - width/2) - altitude*10
+        y: parent.height - height*3/4 - 10 - altitude*10 - altitude * 100
     }
 }
 

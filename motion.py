@@ -7,6 +7,8 @@ from PySide.QtCore import *
 from PySide.QtGui import *
 from PySide.QtDeclarative import *
 
+from collision import Rectangle
+
 import sys
 import os
 import time
@@ -164,11 +166,9 @@ class Collisions(QObject):
             center_point = player.centerPoint()
             vehicle_x, vehicle_y = center_point['x'], center_point['y']
 
-            continue # XXX: remove once the rectangle class is implemented
-
             rect = Rectangle(*variant)
-            if rect.is_inside(vehicle_x, vehicle_y):
-                new_speed = rect.get_new_speed(speed_x, speed_y)
+            if rect.inside(vehicle_x, vehicle_y, 64):
+                new_speed = (-speed_x, -speed_y)
                 player.setProperty('xSpeed', new_speed[0])
                 player.setProperty('ySpeed', new_speed[1])
 
