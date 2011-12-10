@@ -5,19 +5,19 @@ Rectangle {
     width: 800
     height: 600
 
-    Flowerpraticle {
+    Flowerparticle {
         color: 'blue'
     }
 
-    Flowerpraticle {
+    Flowerparticle {
         color: 'yellow'
     }
 
-    Flowerpraticle {
+    Flowerparticle {
         color: 'pink'
     }
 
-    Flowerpraticle {
+    Flowerparticle {
         color: 'red'
     }
 }
