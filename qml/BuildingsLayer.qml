@@ -50,5 +50,18 @@ Item {
         scale: .4
         rotation: 100
     }
+
+    Building {
+        x: 220
+        y: 120
+        scale: .37
+        rotation: -104
+    }
+
+    TehCourt {
+        scale: .5
+        x: parent.width/2 - width/2
+        y: parent.height - height*3/4 - 10
+    }
 }
 
