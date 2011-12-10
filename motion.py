@@ -23,7 +23,7 @@ class Controller(QObject):
     CORRECT_SENSOR_POSITION_LIMITS = (0, 700, 0)
 
     # Minimum time between two PUMP actions
-    WAIT_BETWEEN_PUMPS = .5
+    WAIT_BETWEEN_PUMPS = .6
 
     def __init__(self, id):
         QObject.__init__(self)
@@ -33,6 +33,11 @@ class Controller(QObject):
         self.current_sensor_position = (0, 0, 0)
         self.last_pumping_value = 0
         self.last_pump_action = 0
+
+    @Slot(int)
+    def set_rumble(self, rumble):
+        self.move.set_rumble(rumble)
+        self.move.update_leds()
 
     @Slot(result=int)
     def get_trigger(self):
@@ -156,11 +161,11 @@ class ZoomingView(QDeclarativeView):
         scaleFactor = float(height) / float(dheight)
         rootObject = self.rootObject()
         if rootObject is not None:
-            # XXX: This has some optical problems :/ Workarounds?
             rootObject.setScale(scaleFactor)
         return QDeclarativeView.resizeEvent(self, event)
 
 if __name__ == '__main__':
+    QApplication.setGraphicsSystem('raster') # avoids scaling problems
     app = QApplication(sys.argv)
     view = ZoomingView()
 
