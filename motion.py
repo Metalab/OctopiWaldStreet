@@ -30,6 +30,11 @@ class Controller(QObject):
         self.last_pumping_value = 0
 
     @Slot(result=int)
+    def get_trigger(self):
+        self.move.poll()
+        return self.move.get_trigger()
+
+    @Slot(result=int)
     def get_pumping(self):
         self.move.poll()
         if abs(self.move.gy) < 100:
@@ -127,9 +132,26 @@ class Controller(QObject):
 
         return True
 
+class ZoomingView(QDeclarativeView):
+    def __init__(self):
+        QDeclarativeView.__init__(self)
+        self.setBackgroundBrush(Qt.black)
+        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.SmoothPixmapTransform)
+
+    def resizeEvent(self, event):
+        width, height = event.size().width(), event.size().height()
+        dwidth, dheight = 640, 480
+        scaleFactor = float(height) / float(dheight)
+        rootObject = self.rootObject()
+        if rootObject is not None:
+            # XXX: This has some optical problems :/ Workarounds?
+            rootObject.setScale(scaleFactor)
+        return QDeclarativeView.resizeEvent(self, event)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    view = QDeclarativeView()
+    view = ZoomingView()
 
     steering = Controller(0)
     view.rootContext().setContextProperty('steering', steering)
@@ -140,6 +162,11 @@ if __name__ == '__main__':
     home = os.path.dirname(__file__)
     view.setSource(os.path.join(home, 'qml', 'motion.qml'))
     view.setResizeMode(QDeclarativeView.SizeViewToRootObject)
-    view.show()
+
+    if 'fullscreen' in sys.argv:
+        view.showFullScreen()
+    else:
+        view.show()
+
     app.exec_()
 
