@@ -1,5 +1,6 @@
 
 import Qt 4.7
+import QtMultimediaKit 1.1
 
 Rectangle {
     id: root
@@ -9,6 +10,7 @@ Rectangle {
     Statusbar {
         id: statusBar
         width: parent.width
+        z: 1000
     }
 
     Rectangle {
@@ -52,7 +54,17 @@ Rectangle {
                 statusBar.secondPumpValue = pumping.get_trigger()/255
             }
         }
+    }
 
+    Camera {
+        anchors.fill: parent
+        opacity: .5
+        MouseArea {
+            anchors.fill: parent
+            onClicked: parent.captureImage()
+        }
+        onImageCaptured: console.log('captured')
+        onImageSaved: console.log(path)
     }
 }
 
