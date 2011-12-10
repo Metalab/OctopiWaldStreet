@@ -23,7 +23,8 @@ Rectangle {
         width: parent.width
         height: parent.height - statusBar.height
 
-        color: '#081c1f'
+        //color: '#081c1f'
+        color: '#778899'
 
         Tank {
             id: tank
