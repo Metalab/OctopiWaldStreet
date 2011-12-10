@@ -45,9 +45,10 @@ Rectangle {
             repeat: true
 
             onTriggered: {
-                tank.rotation += 15*steering.get_steering()
+                // PLAYER 1
+                tank.rotation += 15*steering1.get_steering()
 
-                if (pumping.get_pumping()) {
+                if (pumping1.get_pumping()) {
                     var xDirection = -Math.cos((tank.rotation+90)/180*3.1415);
                     var yDirection = -Math.sin((tank.rotation+90)/180*3.1415);
                     tank.xSpeed = xDirection * 10 * statusBar.firstPumpValue;
@@ -61,10 +62,24 @@ Rectangle {
                 tank.xSpeed *= .9
                 tank.ySpeed *= .9
 
-                //statusBar.firstPumpValue = steering.get_trigger()/255
-                //statusBar.secondPumpValue = pumping.get_trigger()/255
-                statusBar.tick()
+                // PLAYER 2
+                tank2.rotation += 15*steering2.get_steering()
 
+                if (pumping2.get_pumping()) {
+                    var xDirection = -Math.cos((tank2.rotation+90)/180*3.1415);
+                    var yDirection = -Math.sin((tank2.rotation+90)/180*3.1415);
+                    tank2.xSpeed = xDirection * 10 * statusBar.secondPumpValue;
+                    tank2.ySpeed = yDirection * 10 * statusBar.secondPumpValue;
+                    statusBar.gotPumpAction(false)
+                }
+
+                tank2.x += tank2.xSpeed;
+                tank2.y += tank2.ySpeed;
+
+                tank2.xSpeed *= .9
+                tank2.ySpeed *= .9
+
+                statusBar.tick()
                 buildingsLayer.mapAllCornerPoints()
             }
         }
