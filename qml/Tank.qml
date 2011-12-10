@@ -7,6 +7,13 @@ Image {
     property real xSpeed: 0
     property real ySpeed: 0
     property real particlestrength: 0.99
+    property alias cloudOpacity: cloud.opacity
+
+    Cloud {
+        id: cloud
+        opacity: 0
+        Behavior on opacity { PropertyAnimation { duration: 500 } }
+    }
 
     scale: .5
     smooth: true
