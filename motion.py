@@ -11,9 +11,6 @@ import sys
 import os
 import time
 
-# XXX: Should not hardcode path to the psmove module here
-sys.path.insert(0, '/home/thp/src/psmoveapi/build/')
-
 import psmove
 
 class Controller(QObject):
@@ -199,11 +196,17 @@ if __name__ == '__main__':
     collisions = Collisions()
     view.rootContext().setContextProperty('collisions', collisions)
 
-    steering = Controller(0)
-    view.rootContext().setContextProperty('steering', steering)
+    steering1 = Controller(0)
+    view.rootContext().setContextProperty('steering1', steering1)
 
-    pumping = Controller(1)
-    view.rootContext().setContextProperty('pumping', pumping)
+    pumping1 = Controller(1)
+    view.rootContext().setContextProperty('pumping1', pumping1)
+
+    steering2 = Controller(2)
+    view.rootContext().setContextProperty('steering2', steering2)
+
+    pumping2 = Controller(1)
+    view.rootContext().setContextProperty('pumping2', pumping2)
 
     home = os.path.dirname(__file__)
     view.setSource(os.path.join(home, 'qml', 'motion.qml'))

@@ -18,9 +18,15 @@ Item {
     property real time: 0
 
     Timer {
-        id: resetRumbleTimer
+        id: resetRumbleTimer1
         interval: 200
-        onTriggered: pumping.set_rumble(0)
+        onTriggered: pumping1.set_rumble(0)
+    }
+
+    Timer {
+        id: resetRumbleTimer2
+        interval: 200
+        onTriggered: pumping2.set_rumble(0)
     }
 
     function gotPumpAction(isFirst) {
@@ -33,8 +39,8 @@ Item {
                 }
 
             } else {
-                pumping.set_rumble(200)
-                resetRumbleTimer.restart()
+                pumping1.set_rumble(200)
+                resetRumbleTimer1.restart()
 
                 firstPumpFrequencyTarget *= .9
 
@@ -44,7 +50,24 @@ Item {
 
             }
         } else {
-            // TODO
+            if (secondPumpValue > .5) {
+                secondPumpFrequencyTarget *= 1.1
+
+                if (secondPumpFrequencyTarget > 2) {
+                    secondPumpFrequencyTarget = 2
+                }
+
+            } else {
+                pumping2.set_rumble(200)
+                resetRumbleTimer2.restart()
+
+                secondPumpFrequencyTarget *= .9
+
+                if (secondPumpFrequencyTarget < .7) {
+                    secondPumpFrequencyTarget = .7
+                }
+
+            }
         }
     }
 
