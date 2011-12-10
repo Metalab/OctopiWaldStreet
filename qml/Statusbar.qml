@@ -6,8 +6,43 @@ Item {
     property real firstPumpValue: .7
     property real secondPumpValue: .2
 
+    property real firstPumpFrequency: 1
+    property real secondPumpFrequency: 1
+
+    property real firstPumpFrequencyTarget: 1
+    property real secondPumpFrequencyTarget: 1
+
     width: 600
     height: 80
+
+    property real time: 0
+
+    function gotPumpAction(isFirst) {
+        if (isFirst) {
+            if (firstPumpValue > .5) {
+                firstPumpFrequencyTarget *= 1.1
+                if (firstPumpFrequencyTarget > 2) {
+                    firstPumpFrequencyTarget = 2
+                } else if (firstPumpFrequencyTarget < .7) {
+                    firstPumpFrequencyTarget = .7
+                }
+            } else {
+                firstPumpFrequencyTarget *= .5
+            }
+        } else {
+            // TODO
+        }
+    }
+
+    function tick() {
+        time += .05
+
+        firstPumpFrequency = firstPumpFrequency * .9 + firstPumpFrequencyTarget * .1
+        secondPumpFrequency = secondPumpFrequency * .9 + secondPumpFrequencyTarget * .1
+
+        firstPumpValue = Math.abs(Math.sin(time*firstPumpFrequency))
+        secondPumpValue = Math.abs(Math.sin(time*secondPumpFrequency))
+    }
 
     Rectangle {
         id: rect
@@ -44,6 +79,8 @@ Item {
                 anchors.leftMargin: 5
                 width: 180
                 progress: statusBar.firstPumpValue
+                color: (statusBar.firstPumpValue > .5)?'green':'red'
+                Behavior on color { ColorAnimation { duration: 500 } }
             }
         }
 
@@ -67,6 +104,7 @@ Item {
             Progressbar {
                 progress: statusBar.secondPumpValue
                 scale: -1 // mirror it
+                color: (statusBar.secondPumpValue > .5)?'green':'red'
 
                 anchors.rightMargin: 5
                 width: 180
