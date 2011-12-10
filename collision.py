@@ -10,23 +10,34 @@ class Rectangle():
     """
     self.p = variant
 
-  def inside(self,x,y,radius=0):
+  def inside(self,x,y,radius=64):
     for i in range(4):
-      if not _point_left_of_line(
+      #print "distance:", _line_point_distance(self.p[i*2],self.p[i*2+1],self.p[(i*2+2)%8],self.p[(i*2+3)%8],x,y)
+      if _line_point_distance(
            self.p[i*2],
            self.p[i*2+1],
            self.p[(i*2+2)%8],
            self.p[(i*2+3)%8],
            x,
            y
-         ):
+         ) < -radius:
         return False;
     return True;
+
+def __test_Rectangle():
+  """
+  >>> Rectangle(128,128,128,256,256,256,256,128).inside(192,32)
+  False
+
+  >>> Rectangle(128,128,128,256,256,256,256,128).inside(192,100)
+  True
+
+  """
+  pass
 
 
 def _line_point_distance(Ax,Ay,Bx,By,Px,Py):
   """
-  deliveres only the absolute value of the distance
 
   :param integer Ax: x value of the first line defining point
   :param integer Ay: y value of the first line defining point
@@ -35,17 +46,46 @@ def _line_point_distance(Ax,Ay,Bx,By,Px,Py):
   :param integer Px: x value of the third line defining point
   :param integer Py: y value of the third line defining point
 
+
+  result positive:
+
+        P
+         O
+         |
+  O -----------> O
+ A              B
+
+
+ 
+  result negative:
+
+  O -----------> O
+ A       |      B
+         O
+        P
+
   >>> _line_point_distance(1,2,3,2,2,1)
-  1
+  1.0
 
   >>> _line_point_distance(1,2,3,2,2,3)
-  1
+  -1.0
+
+  >>> _line_point_distance(1,2,3,2,2,0)
+  2.0
+
+  >>> _line_point_distance(1,2,3,2,2,4)
+  -2.0
 
   """
 
-  #return int( abs(float(Ax-Px)*float(Ay-By)-float(Ax-Bx)*float(Ay-Py)) / math.sqrt( (float(Ax-Px))**2 + (float(Ay-Py))**2 ) )
+  #print locals()
 
-  return int( abs( (float(Px-Ax)*float(By-Ay)) - (float(Py-Ay)*float(Bx-Ax)) ) / math.sqrt( float(Bx-Ax)**2 + float(By-Ay)**2 ) )
+  if _point_left_of_line(Ax,Ay,Bx,By,Px,Py):
+    return -( abs(float(Ax-Bx)*float(Ay-Py)-float(Ax-Px)*float(Ay-By)) / math.sqrt( (float(Ax-Bx))**2 + (float(Ay-By))**2 ) )
+    #return -abs( (float(Px-Ax)*float(By-Ay)) - (float(Py-Ay)*float(Bx-Ax)) ) / math.sqrt( float(Bx-Ax)**2 + float(By-Ay)**2 )
+  else:
+    return ( abs(float(Ax-Bx)*float(Ay-Py)-float(Ax-Px)*float(Ay-By)) / math.sqrt( (float(Ax-Bx))**2 + (float(Ay-By))**2 ) )
+    #return abs( (float(Px-Ax)*float(By-Ay)) - (float(Py-Ay)*float(Bx-Ax)) ) / math.sqrt( float(Bx-Ax)**2 + float(By-Ay)**2 )
 
 
 
@@ -74,41 +114,7 @@ def _point_left_of_line(Ax,Ay,Bx,By,Px,Py):
 
   """
 
-  #print locals()
-
   return float(Bx-Ax)*float(Py-Ay) - float(By-Ay)*float(Px-Ax) > 0
-
-def __tests():
-  """
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(1,1)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(1,3)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(1,5)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(3,1)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(3,3)
-  True
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(3,5)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(5,1)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(5,3)
-  False
-
-  >>> Rectangle(2,2,4,2,4,4,2,4).inside(5,5)
-  False
-
-  """
-  pass
 
 if __name__ == '__main__':
   
