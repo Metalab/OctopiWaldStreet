@@ -27,7 +27,21 @@ class Controller(QObject):
         self.move = psmove.PSMove(id)
         self.sensor_values = []
         self.current_sensor_position = (0, 0, 0)
+        self.last_pumping_value = 0
 
+    @Slot(result=int)
+    def get_pumping(self):
+        self.move.poll()
+        if abs(self.move.gy) < 100:
+            result = 0
+        if self.move.gy > 0 and self.last_pumping_value < 0:
+            result = 1
+        elif self.move.gy < 0 and self.last_pumping_value > 0:
+            result = 1
+        else:
+            result = 0
+        self.last_pumping_value = self.move.gy
+        return result
 
     @Slot(result=int)
     def get_steering(self):
