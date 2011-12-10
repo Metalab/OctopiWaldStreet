@@ -17,17 +17,31 @@ Item {
 
     property real time: 0
 
+    Timer {
+        id: resetRumbleTimer
+        interval: 200
+        onTriggered: pumping.set_rumble(0)
+    }
+
     function gotPumpAction(isFirst) {
         if (isFirst) {
             if (firstPumpValue > .5) {
                 firstPumpFrequencyTarget *= 1.1
+
                 if (firstPumpFrequencyTarget > 2) {
                     firstPumpFrequencyTarget = 2
-                } else if (firstPumpFrequencyTarget < .7) {
+                }
+
+            } else {
+                pumping.set_rumble(200)
+                resetRumbleTimer.restart()
+
+                firstPumpFrequencyTarget *= .9
+
+                if (firstPumpFrequencyTarget < .7) {
                     firstPumpFrequencyTarget = .7
                 }
-            } else {
-                firstPumpFrequencyTarget *= .5
+
             }
         } else {
             // TODO
@@ -40,8 +54,11 @@ Item {
         firstPumpFrequency = firstPumpFrequency * .9 + firstPumpFrequencyTarget * .1
         secondPumpFrequency = secondPumpFrequency * .9 + secondPumpFrequencyTarget * .1
 
-        firstPumpValue = Math.abs(Math.sin(time*firstPumpFrequency))
-        secondPumpValue = Math.abs(Math.sin(time*secondPumpFrequency))
+        var newFirstPumpValue = Math.abs(Math.sin(time*firstPumpFrequency))
+        var newSecondPumpValue = Math.abs(Math.sin(time*secondPumpFrequency))
+
+        firstPumpValue = firstPumpValue * .9 + newFirstPumpValue * .1
+        secondPumpValue = secondPumpValue * .9 + newSecondPumpValue * .1
     }
 
     Rectangle {

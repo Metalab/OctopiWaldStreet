@@ -6,6 +6,7 @@ Rectangle {
     id: root
     width: 640
     height: 480
+    clip: true
 
     Statusbar {
         id: statusBar
@@ -61,6 +62,11 @@ Rectangle {
                 statusBar.tick()
             }
         }
+
+        BuildingsLayer {
+            anchors.fill: parent
+        }
+
     }
 
     Camera {
