@@ -148,6 +148,33 @@ class Controller(QObject):
 
         return True
 
+class Collisions(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+        self.players = [None, None]
+
+    @Slot(int, 'QVariant')
+    def set_player(self, id, player):
+        self.players[id] = player
+        print 'got player:', player, '(', id, ')'
+
+    @Slot('QVariant')
+    def detect(self, variant):
+        x1, y1, x2, y2, x3, y3, x4, y4 = variant
+        for player in self.players:
+            speed_x = player.property('xSpeed')
+            speed_y = player.property('ySpeed')
+            center_point = player.centerPoint()
+            vehicle_x, vehicle_y = center_point['x'], center_point['y']
+
+            continue # XXX: remove once the rectangle class is implemented
+
+            rect = Rectangle(*variant)
+            if rect.is_inside(vehicle_x, vehicle_y):
+                new_speed = rect.get_new_speed(speed_x, speed_y)
+                player.setProperty('xSpeed', new_speed[0])
+                player.setProperty('ySpeed', new_speed[1])
+
 class ZoomingView(QDeclarativeView):
     def __init__(self):
         QDeclarativeView.__init__(self)
@@ -168,6 +195,9 @@ if __name__ == '__main__':
     QApplication.setGraphicsSystem('raster') # avoids scaling problems
     app = QApplication(sys.argv)
     view = ZoomingView()
+
+    collisions = Collisions()
+    view.rootContext().setContextProperty('collisions', collisions)
 
     steering = Controller(0)
     view.rootContext().setContextProperty('steering', steering)

@@ -48,22 +48,29 @@ Rectangle {
                 tank.rotation += 15*steering.get_steering()
 
                 if (pumping.get_pumping()) {
-                    tank.speed = 10 * statusBar.firstPumpValue
+                    var xDirection = -Math.cos((tank.rotation+90)/180*3.1415);
+                    var yDirection = -Math.sin((tank.rotation+90)/180*3.1415);
+                    tank.xSpeed = xDirection * 10 * statusBar.firstPumpValue;
+                    tank.ySpeed = yDirection * 10 * statusBar.firstPumpValue;
                     statusBar.gotPumpAction(true)
                 }
 
-                tank.x -= Math.cos((tank.rotation+90)/180*3.1415) * tank.speed
-                tank.y -= Math.sin((tank.rotation+90)/180*3.1415) * tank.speed
+                tank.x += tank.xSpeed;
+                tank.y += tank.ySpeed;
 
-                tank.speed *= .9
+                tank.xSpeed *= .9
+                tank.ySpeed *= .9
 
                 //statusBar.firstPumpValue = steering.get_trigger()/255
                 //statusBar.secondPumpValue = pumping.get_trigger()/255
                 statusBar.tick()
+
+                buildingsLayer.mapAllCornerPoints()
             }
         }
 
         BuildingsLayer {
+            id: buildingsLayer
             anchors.fill: parent
         }
 
@@ -78,6 +85,11 @@ Rectangle {
         }
         onImageCaptured: console.log('captured')
         onImageSaved: console.log(path)
+    }
+
+    Component.onCompleted: {
+        collisions.set_player(0, tank)
+        collisions.set_player(1, tank2)
     }
 }
 

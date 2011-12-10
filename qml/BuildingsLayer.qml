@@ -2,6 +2,18 @@
 import Qt 4.7
 
 Item {
+    id: buildingsLayer
+
+    function mapAllCornerPoints() {
+        var i = 0;
+
+        for (i=0; i<children.length; i++) {
+            var child = children[i];
+            var corners = child.mapCornerPoints(root);
+            collisions.detect(corners);
+        }
+    }
+
     Building {
         x: 200
         y: 200
