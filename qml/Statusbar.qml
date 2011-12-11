@@ -15,6 +15,16 @@ Item {
     property real firstPumpFrequencyTarget: 1
     property real secondPumpFrequencyTarget: 1
 
+    function reset() {
+        time = 0
+        firstPumpValue = .7
+        secondPumpValue = .2
+        firstPumpFrequency = 1
+        secondPumpFrequency = 1
+        firstPumpFrequencyTarget = 1
+        secondPumpFrequencyTarget = 1
+    }
+
     width: 600
     height: 80
 

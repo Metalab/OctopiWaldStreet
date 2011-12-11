@@ -37,6 +37,11 @@ class Controller(QObject):
         self.last_pumping_value = 0
         self.last_pump_action = 0
 
+    @Slot(result=bool)
+    def move_button_pressed(self):
+        self.move.poll()
+        return (self.move.get_buttons() & psmove.Btn_MOVE) != 0
+
     @Slot(int)
     def set_rumble(self, rumble):
         self.move.set_rumble(rumble)
@@ -77,8 +82,8 @@ class Controller(QObject):
             print 'ignored - WAIT_BETWEEN_PUMPS'
         return result
 
-    @Slot(result=int)
-    def get_steering(self):
+    @Slot(int, result=int)
+    def get_steering(self, player_id):
         result = 0
         self.move.poll()
         self.update_sensor(self.move.gx, self.move.gy, self.move.gz)
@@ -89,7 +94,10 @@ class Controller(QObject):
 
         #print current_sensor_position
         if self.move.get_trigger() > 100:#self.position_is_correct() or True:
-            self.move.set_leds(0, 100, 0)
+            if player_id == 0:
+                self.move.set_leds(0, 0, 100)
+            else:
+                self.move.set_leds(100, 0, 0)
             #self.move.set_rumble(0)
 
             if rotation > 400:
@@ -101,8 +109,10 @@ class Controller(QObject):
                 #print 'LEFT', rotation
                 result = -1
         else:
-            self.move.set_leds(0, 0, 0)
-            #XXX Re-enable after debugging self.move.set_rumble(200)
+            if player_id == 0:
+                self.move.set_leds(0, 0, 10)
+            else:
+                self.move.set_leds(10, 0, 0)
 
         self.move.update_leds()
         return result
@@ -167,6 +177,10 @@ class Collisions(QObject):
         self.players = [None, None]
         self._stateIndex = 0
         self.last_state_change = 0
+
+    @Slot()
+    def reset_internal_state(self):
+        self.setStateIndex(0)
 
     def getStateIndex(self):
         return self._stateIndex
