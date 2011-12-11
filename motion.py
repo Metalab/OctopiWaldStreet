@@ -194,6 +194,8 @@ class Collisions(QObject):
 
     stateIndex = Property(int, getStateIndex, setStateIndex, notify=stateIndexChanged)
 
+    bounce = Signal()
+
     @Slot(int, 'QVariant')
     def set_player(self, id, player):
         self.players[id] = player
@@ -226,6 +228,7 @@ class Collisions(QObject):
                         new_speed = (-speed_x*1.5, -speed_y*1.5)
                         player.setProperty('xSpeed', new_speed[0])
                         player.setProperty('ySpeed', new_speed[1])
+                        self.bounce.emit()
                         break
 
 class ZoomingView(QDeclarativeView):

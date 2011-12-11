@@ -43,9 +43,19 @@ Rectangle {
         }
     }
 
+    Connections {
+      target: collisions
+      onBounce: crashSound1.play()
+
     SoundEffect {
         id: startingSound
         source: 'snd/car-accelerate.wav'
+        volume: .5
+    }
+
+    SoundEffect {
+        id: crashSound1
+        source: 'snd/crash1.wav'
         volume: .5
     }
 
