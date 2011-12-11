@@ -61,7 +61,7 @@ Rectangle {
             repeat: true
 
             onTriggered: {
-                var rotation_step = 5
+                var rotation_step = 10
                 // PLAYER 1
                 tank.cloudOpacity = steering1.get_trigger() / 256
                 tank.rotation += rotation_step*steering1.get_steering()

@@ -5,7 +5,7 @@ import Qt 4.7
 
 Building {
     isGoal: true
-    property real altitude: 0
+    altitude: 0
     source: 'img/goal.png'
 }
 

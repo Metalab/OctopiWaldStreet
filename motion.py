@@ -60,7 +60,7 @@ class Controller(QObject):
                 result = 0
             self.last_pumping_value = self.move.get_trigger()
         else:
-            if abs(self.move.ay) < 20000:
+            if abs(self.move.ay) < 10000:
                 return 0
             if self.move.gy > 0 and self.last_pumping_value < 0:
                 result = 1
@@ -165,6 +165,20 @@ class Collisions(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.players = [None, None]
+        self._stateIndex = 0
+        self.last_state_change = 0
+
+    def getStateIndex(self):
+        return self._stateIndex
+
+    def setStateIndex(self, stateIndex):
+        if self._stateIndex != stateIndex:
+            self._stateIndex = stateIndex
+            self.stateIndexChanged.emit()
+
+    stateIndexChanged = Signal()
+
+    stateIndex = Property(int, getStateIndex, setStateIndex, notify=stateIndexChanged)
 
     @Slot(int, 'QVariant')
     def set_player(self, id, player):
@@ -189,7 +203,10 @@ class Collisions(QObject):
                 if rect.inside(edge_x, edge_y):
                     if isGoal:
                         #print 'in goal!'
-                        player.setProperty('points', player.property('points') + 1)
+                        if self.last_state_change + 5 < time.time():
+                            player.setProperty('points', player.property('points') + 1)
+                            self.setStateIndex(self.getStateIndex()+1)
+                            self.last_state_change = time.time()
                     else:
                         #print 'is inside'
                         new_speed = (-speed_x, -speed_y)

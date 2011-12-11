@@ -84,6 +84,24 @@ Item {
     }
 
     TehCourt {
+        id: tehCourt
+        state: ['first', 'second', 'third'][collisions.stateIndex%3]
+        altitude: 1
+
+        states: [
+            State {
+                name: 'first'
+            },
+            State {
+                name: 'second'
+                PropertyChanges { target: tehCourt; x: -40; y: 10; rotation: 140 }
+            },
+            State {
+                name: 'third'
+                PropertyChanges { target: tehCourt; x: 400; y: 20; rotation: 220 }
+            }
+        ]
+
         PropertyAnimation on altitude {
             duration: 5000
             //loops: 100
@@ -92,12 +110,10 @@ Item {
             running: false // this should be set to running once the game is
                            // completed. then it will fly away. yo!
         }
-        rotation: 90 * altitude
 
-        id: tehCourt
         scale: .5
-        x: (1-altitude)*(parent.width/2 - width/2) - altitude*10
-        y: parent.height - height*3/4 - 10 - altitude*10 - altitude * 100
+        x: (parent.width/2 - width/2) - altitude*10
+        y: (parent.height - height*3/4 - 10) - altitude*10
     }
 }
 
