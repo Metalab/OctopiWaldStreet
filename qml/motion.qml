@@ -9,7 +9,7 @@ Rectangle {
     clip: true
     color: 'black'
 
-    state: 'intro'
+    state: 'finished'
 
     states: [
         State {
@@ -47,8 +47,9 @@ Rectangle {
     }
 
     Connections {
-      target: collisions
-      onBounce: crashSound1.play()
+        target: collisions
+        onBounce: crashSound1.play()
+    }
 
     SoundEffect {
         id: startingSound
