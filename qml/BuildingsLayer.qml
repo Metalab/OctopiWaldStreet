@@ -1,5 +1,6 @@
 
 import Qt 4.7
+import QtMultimediaKit 1.1
 
 Item {
     id: buildingsLayer
@@ -11,21 +12,21 @@ Item {
             var child = children[i];
             if (child.mapCornerPoints !== undefined) {
                 var corners = child.mapCornerPoints(root);
-                collisions.detect(corners);
+                collisions.detect(corners, child.isGoal);
             }
         }
 
         // left border
-        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480]);
+        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480], false);
 
         // right border
-        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480]);
+        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480], false);
 
         // top border
-        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height]);
+        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height], false);
 
         // bottom border
-        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580]);
+        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580], false);
     }
 
     Building {
@@ -84,6 +85,32 @@ Item {
     }
 
     TehCourt {
+        id: tehCourt
+        state: ['first', 'second', 'third'][collisions.stateIndex%3]
+        altitude: 1
+
+        onStateChanged: hoveringSound.play()
+
+        SoundEffect {
+            id: hoveringSound
+            source: 'snd/hovering.wav'
+            volume: .5
+        }
+
+        states: [
+            State {
+                name: 'first'
+            },
+            State {
+                name: 'second'
+                PropertyChanges { target: tehCourt; x: -40; y: 10; rotation: 140 }
+            },
+            State {
+                name: 'third'
+                PropertyChanges { target: tehCourt; x: 400; y: 20; rotation: 220 }
+            }
+        ]
+
         PropertyAnimation on altitude {
             duration: 5000
             //loops: 100
@@ -92,12 +119,10 @@ Item {
             running: false // this should be set to running once the game is
                            // completed. then it will fly away. yo!
         }
-        rotation: 90 * altitude
 
-        id: tehCourt
         scale: .5
-        x: (1-altitude)*(parent.width/2 - width/2) - altitude*10
-        y: parent.height - height*3/4 - 10 - altitude*10 - altitude * 100
+        x: (parent.width/2 - width/2) - altitude*10
+        y: (parent.height - height*3/4 - 10) - altitude*10
     }
 }
 

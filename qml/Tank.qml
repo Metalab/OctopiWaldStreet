@@ -4,10 +4,22 @@ import Qt.labs.particles 1.0
 
 Image {
     property string color: 'blue'
+    property int initialX: 0
+    property int initialY: 0
+    property int points: 0
     property real xSpeed: 0
     property real ySpeed: 0
     property real particlestrength: (xSpeed + ySpeed) / 7
     property alias cloudOpacity: cloud.opacity
+
+    function reset() {
+        x = initialX
+        y = initialY
+        xSpeed = 0
+        ySpeed = 0
+        points = 0
+        rotation = 0
+    }
 
     Cloud {
         id: cloud

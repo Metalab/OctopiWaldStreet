@@ -2,6 +2,15 @@
 import Qt 4.7
 
 Image {
+    id: building
+    property bool isGoal: false
+    property real altitude: 0
+    property real transitionDuration: 1000
+
+    Behavior on rotation { RotationAnimation { duration: building.transitionDuration } }
+    Behavior on x { RotationAnimation { duration: building.transitionDuration } }
+    Behavior on y { RotationAnimation { duration: building.transitionDuration } }
+
     source: 'img/building.png'
     smooth: true
 
