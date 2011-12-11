@@ -187,7 +187,7 @@ Rectangle {
 
     Timer {
         id: gameTimeTimer
-        property int defaultDuration: 20
+        property int defaultDuration: 60
         property int remainingSeconds: 0 // That's the duration of the game in milliseconds
         interval: 1000
         repeat: true
