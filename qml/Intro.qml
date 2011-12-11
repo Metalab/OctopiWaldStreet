@@ -11,6 +11,11 @@ Rectangle {
   height: 480
   color: "black"
 
+  SoundEffect {
+    id: spraySound
+    source: 'snd/spray.wav'
+  } 
+
   Image {
     id: theDude
     x: 500
@@ -124,6 +129,9 @@ Rectangle {
       NumberAnimation { target: theCop; property: "x"; from: -220; to: 20; duration: 400}
     }
     PauseAnimation { duration: 3000 }
+    ScriptAction{
+      spraySound.play()
+    }
     ParallelAnimation {
       NumberAnimation { target: i_5; property: "opacity"; from: 1.0; to: 0.0; duration: 500}
       SequentialAnimation{

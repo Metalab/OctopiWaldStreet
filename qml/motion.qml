@@ -68,7 +68,6 @@ Rectangle {
     SoundEffect {
         id: crashSound1
         source: 'snd/crash1.wav'
-<<<<<<< HEAD
     }
 
     SoundEffect {
@@ -79,13 +78,6 @@ Rectangle {
     SoundEffect {
         id: crashSound3
         source: 'snd/crash3.wav'
-    }
-
-    SoundEffect {
-        id: spraySound
-        source: 'snd/spray.wav'
-=======
->>>>>>> 902e576386e8b18dacbb37506e2a48616cb13d50
     }
 
     Rectangle {
