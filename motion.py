@@ -223,7 +223,7 @@ class Collisions(QObject):
                             self.last_state_change = time.time()
                     else:
                         #print 'is inside'
-                        new_speed = (-speed_x, -speed_y)
+                        new_speed = (-speed_x*1.5, -speed_y*1.5)
                         player.setProperty('xSpeed', new_speed[0])
                         player.setProperty('ySpeed', new_speed[1])
                         break

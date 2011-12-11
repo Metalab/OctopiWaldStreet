@@ -43,6 +43,12 @@ Rectangle {
         }
     }
 
+    SoundEffect {
+        id: startingSound
+        source: 'snd/car-start.wav'
+        volume: .5
+    }
+
     Rectangle {
         id: playField
         visible: root.state == 'playing'
@@ -139,6 +145,7 @@ Rectangle {
                     tank.xSpeed = xDirection * 10 * statusBar.firstPumpValue;
                     tank.ySpeed = yDirection * 10 * statusBar.firstPumpValue;
                     statusBar.gotPumpAction(true)
+                    startingSound.play()
                 }
 
                 tank.x += tank.xSpeed;
@@ -157,6 +164,7 @@ Rectangle {
                     tank2.xSpeed = xDirection * 10 * statusBar.secondPumpValue;
                     tank2.ySpeed = yDirection * 10 * statusBar.secondPumpValue;
                     statusBar.gotPumpAction(false)
+                    startingSound.play()
                 }
 
                 tank2.x += tank2.xSpeed;

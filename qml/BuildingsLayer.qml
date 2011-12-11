@@ -1,5 +1,6 @@
 
 import Qt 4.7
+import QtMultimediaKit 1.1
 
 Item {
     id: buildingsLayer
@@ -87,6 +88,14 @@ Item {
         id: tehCourt
         state: ['first', 'second', 'third'][collisions.stateIndex%3]
         altitude: 1
+
+        onStateChanged: hoveringSound.play()
+
+        SoundEffect {
+            id: hoveringSound
+            source: 'snd/hovering.wav'
+            volume: .5
+        }
 
         states: [
             State {

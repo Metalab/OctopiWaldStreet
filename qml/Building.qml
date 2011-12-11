@@ -5,7 +5,7 @@ Image {
     id: building
     property bool isGoal: false
     property real altitude: 0
-    property real transitionDuration: 500
+    property real transitionDuration: 1000
 
     Behavior on rotation { RotationAnimation { duration: building.transitionDuration } }
     Behavior on x { RotationAnimation { duration: building.transitionDuration } }
