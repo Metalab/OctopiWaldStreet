@@ -9,9 +9,12 @@ Rectangle {
     clip: true
     color: 'black'
 
-    state: 'finished'
+    state: 'intro'
 
     states: [
+        State {
+            name: 'intro'
+        },
         State {
             name: 'playing'
         },
@@ -275,6 +278,17 @@ Rectangle {
         font.bold: true
         visible: gameTimeTimer.remainingSeconds < 6 && gameTimeTimer.remainingSeconds > 0
         text: gameTimeTimer.remainingSeconds
+    }
+
+    Intro {
+        opacity: root.state == 'intro'
+        Behavior on opacity { PropertyAnimation { } }
+
+        anchors.fill: parent
+        onAnimationsDone: {
+            root.state = 'finished'
+            console.log(root.state)
+        }
     }
 
     Component.onCompleted: {
