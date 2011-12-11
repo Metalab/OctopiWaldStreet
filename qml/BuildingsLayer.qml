@@ -11,21 +11,21 @@ Item {
             var child = children[i];
             if (child.mapCornerPoints !== undefined) {
                 var corners = child.mapCornerPoints(root);
-                collisions.detect(corners);
+                collisions.detect(corners, child.isGoal);
             }
         }
 
         // left border
-        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480]);
+        collisions.detect([-100, 0, 0, 0, 0, 480, -100, 480], false);
 
         // right border
-        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480]);
+        collisions.detect([640, 0, 740, 0, 740, 480, 640, 480], false);
 
         // top border
-        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height]);
+        collisions.detect([0, 0, 640, 0, 640, statusBar.height, 0, statusBar.height], false);
 
         // bottom border
-        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580]);
+        collisions.detect([0, 480, 640, 480, 640, 580, 0, 580], false);
     }
 
     Building {

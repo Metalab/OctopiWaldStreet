@@ -12,6 +12,9 @@ Rectangle {
         id: statusBar
         width: parent.width
         z: 1000
+
+        firstPoints: tank.points
+        secondPoints: tank2.points
     }
 
     Rectangle {
@@ -25,6 +28,18 @@ Rectangle {
 
         //color: '#081c1f'
         color: '#778899'
+
+        Camera {
+            anchors.fill: parent
+            anchors.topMargin: -statusBar.height
+            opacity: .5
+            MouseArea {
+                anchors.fill: parent
+                onClicked: parent.captureImage()
+            }
+            onImageCaptured: console.log('captured')
+            onImageSaved: console.log(path)
+        }
 
         Tank {
             id: tank
@@ -46,9 +61,10 @@ Rectangle {
             repeat: true
 
             onTriggered: {
+                var rotation_step = 5
                 // PLAYER 1
                 tank.cloudOpacity = steering1.get_trigger() / 256
-                tank.rotation += 15*steering1.get_steering()
+                tank.rotation += rotation_step*steering1.get_steering()
 
                 if (pumping1.get_pumping()) {
                     var xDirection = -Math.cos((tank.rotation+90)/180*3.1415);
@@ -66,7 +82,7 @@ Rectangle {
 
                 // PLAYER 2
                 tank2.cloudOpacity = steering2.get_trigger() / 256
-                tank2.rotation += 15*steering2.get_steering()
+                tank2.rotation += rotation_step*steering2.get_steering()
 
                 if (pumping2.get_pumping()) {
                     var xDirection = -Math.cos((tank2.rotation+90)/180*3.1415);
@@ -92,17 +108,6 @@ Rectangle {
             anchors.fill: parent
         }
 
-    }
-
-    Camera {
-        anchors.fill: parent
-        opacity: .5
-        MouseArea {
-            anchors.fill: parent
-            onClicked: parent.captureImage()
-        }
-        onImageCaptured: console.log('captured')
-        onImageSaved: console.log(path)
     }
 
     Component.onCompleted: {

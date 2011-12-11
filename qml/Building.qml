@@ -2,6 +2,8 @@
 import Qt 4.7
 
 Image {
+    property bool isGoal: false
+
     source: 'img/building.png'
     smooth: true
 

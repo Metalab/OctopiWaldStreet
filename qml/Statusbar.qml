@@ -3,6 +3,9 @@ import QtQuick 1.0
 Item {
     id: statusBar
 
+    property int firstPoints: 0
+    property int secondPoints: 0
+
     property real firstPumpValue: .7
     property real secondPumpValue: .2
 
@@ -108,7 +111,7 @@ Item {
 
             Text {
                 id: firstPumpText
-                text: 'Pump'
+                text: '' + statusBar.firstPoints
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 color: 'white'
@@ -153,7 +156,7 @@ Item {
 
             Text {
                 id: secondPumpText
-                text: 'Pump'
+                text: '' + statusBar.secondPoints
                 anchors.right: parent.right
                 anchors.leftMargin: 5
                 color: 'white'

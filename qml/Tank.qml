@@ -4,6 +4,7 @@ import Qt.labs.particles 1.0
 
 Image {
     property string color: 'blue'
+    property int points: 0
     property real xSpeed: 0
     property real ySpeed: 0
     property real particlestrength: (xSpeed + ySpeed) / 7

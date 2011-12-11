@@ -12,6 +12,7 @@ from collision import Rectangle
 import sys
 import os
 import time
+import math
 
 import psmove
 
@@ -22,7 +23,10 @@ class Controller(QObject):
     CORRECT_SENSOR_POSITION_LIMITS = (0, 700, 0)
 
     # Minimum time between two PUMP actions
-    WAIT_BETWEEN_PUMPS = .6
+    WAIT_BETWEEN_PUMPS = 0 #.6
+
+    # Use trigger for pumping instead of pumping motion
+    USE_TRIGGER_FOR_PUMPING = False
 
     def __init__(self, id):
         QObject.__init__(self)
@@ -48,19 +52,29 @@ class Controller(QObject):
         self.move.poll()
         #print 'x: %6d, y: %6d, z: %6d'% (self.move.gx, self.move.gy, self.move.gz)
         #print 'x: %6d, y: %6d, z: %6d'% (self.move.ax, self.move.ay, self.move.az)
-        #print self.move.ay
-        if abs(self.move.ay) < 20000:
-            return 0
-        if self.move.gy > 0 and self.last_pumping_value < 0:
-            result = 1
-        elif self.move.gy < 0 and self.last_pumping_value > 0:
-            result = 1
+
+        if self.USE_TRIGGER_FOR_PUMPING:
+            if self.move.get_trigger() > 250 and self.last_pumping_value < 250:
+                result = 1
+            else:
+                result = 0
+            self.last_pumping_value = self.move.get_trigger()
         else:
-            result = 0
-        self.last_pumping_value = self.move.gy
+            if abs(self.move.ay) < 20000:
+                return 0
+            if self.move.gy > 0 and self.last_pumping_value < 0:
+                result = 1
+            elif self.move.gy < 0 and self.last_pumping_value > 0:
+                result = 1
+            else:
+                result = 0
+            self.last_pumping_value = self.move.gy
+
         if result > 0 and self.last_pump_action + self.WAIT_BETWEEN_PUMPS < time.time():
-            print 'Pump', time.time()
+            #print 'Pump', time.time()
             self.last_pump_action = time.time()
+        elif result > 0:
+            print 'ignored - WAIT_BETWEEN_PUMPS'
         return result
 
     @Slot(result=int)
@@ -74,8 +88,8 @@ class Controller(QObject):
         rotation = self.get_rotation()
 
         #print current_sensor_position
-        if self.position_is_correct():
-            self.move.set_leds(0, 0, 0)
+        if self.move.get_trigger() > 100:#self.position_is_correct() or True:
+            self.move.set_leds(0, 100, 0)
             #self.move.set_rumble(0)
 
             if rotation > 400:
@@ -87,7 +101,7 @@ class Controller(QObject):
                 #print 'LEFT', rotation
                 result = -1
         else:
-            self.move.set_leds(255, 0, 0)
+            self.move.set_leds(0, 0, 0)
             #XXX Re-enable after debugging self.move.set_rumble(200)
 
         self.move.update_leds()
@@ -157,8 +171,8 @@ class Collisions(QObject):
         self.players[id] = player
         print 'got player:', player, '(', id, ')'
 
-    @Slot('QVariant')
-    def detect(self, variant):
+    @Slot('QVariant', bool)
+    def detect(self, variant, isGoal):
         x1, y1, x2, y2, x3, y3, x4, y4 = variant
         for player in self.players:
             speed_x = player.property('xSpeed')
@@ -167,10 +181,21 @@ class Collisions(QObject):
             vehicle_x, vehicle_y = center_point['x'], center_point['y']
 
             rect = Rectangle(*variant)
-            if rect.inside(vehicle_x, vehicle_y, 64):
-                new_speed = (-speed_x, -speed_y)
-                player.setProperty('xSpeed', new_speed[0])
-                player.setProperty('ySpeed', new_speed[1])
+            radius = 64 * .5 # tank.width/height * tank.scale
+            for angle in range(0, 360, 360/8):
+                edge_x = vehicle_x + radius * math.sin(float(angle)/180*math.pi)
+                edge_y = vehicle_y + radius * math.cos(float(angle)/180*math.pi)
+                #print edge_x, edge_y
+                if rect.inside(edge_x, edge_y):
+                    if isGoal:
+                        #print 'in goal!'
+                        player.setProperty('points', player.property('points') + 1)
+                    else:
+                        #print 'is inside'
+                        new_speed = (-speed_x, -speed_y)
+                        player.setProperty('xSpeed', new_speed[0])
+                        player.setProperty('ySpeed', new_speed[1])
+                        break
 
 class ZoomingView(QDeclarativeView):
     def __init__(self):
@@ -199,10 +224,10 @@ if __name__ == '__main__':
     steering1 = Controller(0)
     view.rootContext().setContextProperty('steering1', steering1)
 
-    pumping1 = Controller(1)
+    pumping1 = Controller(0)
     view.rootContext().setContextProperty('pumping1', pumping1)
 
-    steering2 = Controller(2)
+    steering2 = Controller(1)
     view.rootContext().setContextProperty('steering2', steering2)
 
     pumping2 = Controller(1)
