@@ -48,18 +48,41 @@ Rectangle {
 
     Connections {
       target: collisions
-      onBounce: crashSound1.play()
+      onBounce: { 
+        var rand = Math.random();
+        if (rand < 0.33){
+          crashSound1.play();
+        }else if (rand < 0.66){
+          crashSound2.play();
+        }else{
+          crashSound3.play();
+        }
+      }
+    }
 
     SoundEffect {
         id: startingSound
         source: 'snd/car-accelerate.wav'
-        volume: .5
     }
 
     SoundEffect {
         id: crashSound1
         source: 'snd/crash1.wav'
-        volume: .5
+    }
+
+    SoundEffect {
+        id: crashSound2
+        source: 'snd/crash2.wav'
+    }
+
+    SoundEffect {
+        id: crashSound3
+        source: 'snd/crash3.wav'
+    }
+
+    SoundEffect {
+        id: spraySound
+        source: 'snd/spray.wav'
     }
 
     Rectangle {
