@@ -5,15 +5,19 @@ Rectangle {
     width: 800
     height: 600
 
-    Moneyparticle {
-        currency: 'dollar'
-    }
+    //Moneyparticle {
+    //    currency: 'dollar'
+    //}
 
     Moneyparticle {
         currency: 'euro'
     }
 
+    //Moneyparticle {
+    //    currency: 'pound'
+    //}
+
     Moneyparticle {
-        currency: 'pound'
+        currency: 'thaler'
     }
 }
