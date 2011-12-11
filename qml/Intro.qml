@@ -49,7 +49,7 @@ Rectangle {
   
   Text {
     id: i_3
-    text: "so he decided<br />file a complaint<br /> about it"
+    text: "so he decided to<br />file a complaint<br /> about it"
     color: "white"
     x: 50
     y: 180
@@ -100,7 +100,7 @@ Rectangle {
     id: intro
     running: true
     
-    /*NumberAnimation { target: theDude; property: "x"; from: 500; to: 350; duration: 400} 
+    NumberAnimation { target: theDude; property: "x"; from: 500; to: 350; duration: 400} 
     NumberAnimation { target: i_1; property: "opacity"; from: 0.0; to: 1.0; duration: 500}
     PauseAnimation { duration: 500 }
     NumberAnimation { target: i_2; property: "opacity"; from: 0.0; to: 1.0; duration: 500}
@@ -114,7 +114,7 @@ Rectangle {
     NumberAnimation { target: theDude; property: "x"; from: 350; to: 500; duration: 400} 
     NumberAnimation { target: i_3; property: "opacity"; from: 1.0; to: 0.0; duration: 500}
 
-    PauseAnimation{ duration: 500 }*/
+    PauseAnimation{ duration: 500 }
 
     NumberAnimation { target: i_4; property: "opacity"; from: 0.0; to: 1.0; duration: 500}
     PauseAnimation { duration: 500 }
