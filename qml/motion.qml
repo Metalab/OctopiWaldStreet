@@ -8,6 +8,17 @@ Rectangle {
     height: 480
     clip: true
 
+    state: 'playing'
+
+    states: [
+        State {
+            name: 'playing'
+        },
+        State {
+            name: 'finished'
+        }
+    ]
+
     Statusbar {
         id: statusBar
         width: parent.width
@@ -30,6 +41,9 @@ Rectangle {
         color: '#778899'
 
         Camera {
+            id: sneakyCam
+            property variant imagePaths: []
+
             anchors.fill: parent
             anchors.topMargin: -statusBar.height
             opacity: .5
@@ -37,8 +51,23 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: parent.captureImage()
             }
+
+            Timer {
+                running: root.state == 'playing'
+                onTriggered: sneakyCam.captureImage()
+                interval: 3000
+                repeat: true
+            }
+
             onImageCaptured: console.log('captured')
-            onImageSaved: console.log(path)
+            onImageSaved: {
+                console.log('smile(d)!')
+                //console.log(path)
+                sneakyCam.imagePaths = sneakyCam.imagePaths.concat([path]);
+                for (var i in sneakyCam.imagePaths) {
+                    //console.log('' + i + ': ' + sneakyCam.imagePaths[i])
+                }
+            }
         }
 
         Tank {
@@ -56,7 +85,7 @@ Rectangle {
         }
 
         Timer {
-            running: true
+            running: root.state == 'playing'
             interval: 30
             repeat: true
 
@@ -108,6 +137,32 @@ Rectangle {
             anchors.fill: parent
         }
 
+    }
+
+    Timer {
+        interval: 60000 // That's the duration of the game in milliseconds
+        running: true
+        onTriggered: {
+            console.log('finished')
+            root.state = 'finished'
+        }
+    }
+
+    Image {
+        id: bestShots
+        property int shotIndex: 0
+        visible: root.state == 'finished'
+
+        Timer {
+            running: parent.visible
+            interval: 100
+            repeat: true
+
+            onTriggered: {
+                bestShots.shotIndex = bestShots.shotIndex + 1
+                bestShots.source = '../' + sneakyCam.imagePaths[bestShots.shotIndex%sneakyCam.imagePaths.length];
+            }
+        }
     }
 
     Component.onCompleted: {
