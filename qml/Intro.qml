@@ -2,6 +2,8 @@ import Qt 4.7
 import Qt.labs.particles 1.0
 
 Rectangle {
+    id: intro
+    signal animationsDone
 
   FontLoader { id: atozFont; source: "fnt/ATOZ____.TTF" }
 
@@ -97,7 +99,6 @@ Rectangle {
 
 
   SequentialAnimation { 
-    id: intro
     running: true
     
     NumberAnimation { target: theDude; property: "x"; from: 500; to: 350; duration: 400} 
@@ -133,6 +134,12 @@ Rectangle {
     }
     NumberAnimation { target: i_4; property: "opacity"; from: 1.0; to: 0.0; duration: 500}
     NumberAnimation { target: theCop; property: "x"; from: 20; to: -220; duration: 400}
+    ScriptAction {
+        script: {
+            console.log('ohai test')
+            intro.animationsDone()
+        }
+    }
 
   }
 

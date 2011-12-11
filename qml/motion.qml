@@ -9,9 +9,12 @@ Rectangle {
     clip: true
     color: 'black'
 
-    state: 'finished'
+    state: 'intro'
 
     states: [
+        State {
+            name: 'intro'
+        },
         State {
             name: 'playing'
         },
@@ -197,7 +200,7 @@ Rectangle {
 
     Timer {
         id: gameTimeTimer
-        property int defaultDuration: 20
+        property int defaultDuration: 60
         property int remainingSeconds: 0 // That's the duration of the game in milliseconds
         interval: 1000
         repeat: true
@@ -285,6 +288,17 @@ Rectangle {
         font.bold: true
         visible: gameTimeTimer.remainingSeconds < 6 && gameTimeTimer.remainingSeconds > 0
         text: gameTimeTimer.remainingSeconds
+    }
+
+    Intro {
+        opacity: root.state == 'intro'
+        Behavior on opacity { PropertyAnimation { } }
+
+        anchors.fill: parent
+        onAnimationsDone: {
+            root.state = 'finished'
+            console.log(root.state)
+        }
     }
 
     Component.onCompleted: {
