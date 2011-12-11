@@ -9,7 +9,22 @@ Rectangle {
     clip: true
     color: 'black'
 
-    state: 'finished'
+    state: 'intro'
+
+    SoundEffect {
+        id: music
+        source: 'snd/Franck_Camu-In_The_Mood_For_Love.wav'
+        loops: -1
+    }
+
+    onStateChanged: {
+        if (state == 'playing') {
+            music.play()
+        } else {
+            music.stop()
+        }
+    }
+
 
     states: [
         State {

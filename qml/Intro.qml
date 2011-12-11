@@ -1,9 +1,19 @@
 import Qt 4.7
 import Qt.labs.particles 1.0
 
+import QtMultimediaKit 1.1
+
 Rectangle {
     id: intro
     signal animationsDone
+
+
+    SoundEffect {
+        id: music
+        source: 'snd/Franck_Camu-In_The_Mood_For_Love.wav'
+        loops: -1
+    }
+
 
   FontLoader { id: atozFont; source: "fnt/ATOZ____.TTF" }
 
@@ -105,6 +115,7 @@ Rectangle {
 
   SequentialAnimation { 
     running: true
+    ScriptAction { script: music.play() }
     
     NumberAnimation { target: theDude; property: "x"; from: 500; to: 350; duration: 400} 
     NumberAnimation { target: i_1; property: "opacity"; from: 0.0; to: 1.0; duration: 500}
@@ -142,6 +153,7 @@ Rectangle {
     }
     NumberAnimation { target: i_4; property: "opacity"; from: 1.0; to: 0.0; duration: 500}
     NumberAnimation { target: theCop; property: "x"; from: 20; to: -220; duration: 400}
+    ScriptAction { script: music.stop() }
     ScriptAction {
         script: {
             console.log('ohai test')
