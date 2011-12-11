@@ -7,4 +7,5 @@ Fireworkparticle {
     count: 50
     scale: 1.5
     velocity: -100
+    smooth: true
 }
