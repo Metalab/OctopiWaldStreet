@@ -6,7 +6,7 @@ Image {
     property string color: 'blue'
     property real xSpeed: 0
     property real ySpeed: 0
-    property real particlestrength: 0.99
+    property real particlestrength: (xSpeed + ySpeed) / 7
     property alias cloudOpacity: cloud.opacity
 
     Cloud {
