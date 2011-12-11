@@ -45,7 +45,7 @@ Rectangle {
 
     SoundEffect {
         id: startingSound
-        source: 'snd/car-start.wav'
+        source: 'snd/car-accelerate.wav'
         volume: .5
     }
 
