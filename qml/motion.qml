@@ -13,7 +13,7 @@ Rectangle {
 
     SoundEffect {
         id: music
-        source: 'snd/Franck_Camu-In_The_Mood_For_Love.wav'
+        source: 'snd/gameplay.wav'
         loops: -1
     }
 
