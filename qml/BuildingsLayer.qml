@@ -94,7 +94,6 @@ Item {
         SoundEffect {
             id: hoveringSound
             source: 'snd/hovering.wav'
-            volume: .5
         }
 
         states: [
