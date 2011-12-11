@@ -14,6 +14,6 @@ Rectangle {
     }
 
     Moneyparticle {
-        currency: 'pounds'
+        currency: 'pound'
     }
 }
